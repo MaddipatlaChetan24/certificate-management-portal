@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Certificate Management Portal - Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; 
+            background: #090a0f; /* Dark solid background for the particle effect */
+            color: #333; 
+            overflow: hidden;
+        }
+        
+        /* --- *** NEW: Particle Canvas Container *** --- */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1; /* Sits on top of the body background but behind everything else */
+        }
+
+        .container {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10; /* Ensure login card is on top of particles and waves */
+        }
+
+        .login-card { background: #ffffff; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1); padding: 2.5rem; width: 100%; max-width: 420px; text-align: center; }
+        .logo { background: linear-gradient(135deg, #868CFF, #4318FF); border-radius: 16px; width: 64px; height: 64px; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; }
+        .logo svg { width: 32px; height: 32px; }
+        h1 { font-size: 2rem; font-weight: 700; color: #1a202c; margin-bottom: 0.5rem; }
+        .subtitle { font-size: 1rem; color: #718096; margin-bottom: 2rem; }
+        .role-toggle { display: flex; background: #f7fafc; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 2rem; padding: 5px; }
+        .role-toggle button { flex: 1; padding: 0.75rem; border: none; background: transparent; border-radius: 8px; cursor: pointer; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.3s ease; }
+        .role-toggle button.active { background: linear-gradient(135deg, #868CFF, #4318FF); color: white; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+        .input-group { text-align: left; margin-bottom: 1.5rem; }
+        .input-group label { display: block; font-size: 0.875rem; font-weight: 500; color: #4a5568; margin-bottom: 0.5rem; }
+        .input-group input { width: 100%; padding: 0.75rem 1rem; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
+        .login-btn { width: 100%; padding: 1rem; border: none; border-radius: 12px; background: linear-gradient(135deg, #868CFF, #4318FF); color: white; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .login-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .switch-link { margin-top: 1.5rem; font-size: 0.875rem; color: #4318FF; cursor: pointer; font-weight: 500; }
+        .otp-input-container { display: flex; justify-content: space-between; gap: 10px; margin: 2rem 0; }
+        .otp-input { width: 48px; height: 48px; text-align: center; font-size: 1.5rem; font-weight: 700; border: 1px solid #e2e8f0; border-radius: 8px; outline: none; transition: border-color 0.3s, box-shadow 0.3s; }
+        .otp-input:focus { border-color: #4318FF; box-shadow: 0 0 0 3px rgba(67, 24, 255, 0.2); }
+
+        .waves-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 100px; z-index: 5; pointer-events: none; }
+        .waves > use { animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite; }
+        .waves > use:nth-child(1) { animation-delay: -2s; animation-duration: 7s; }
+        .waves > use:nth-child(2) { animation-delay: -3s; animation-duration: 10s; }
+        .waves > use:nth-child(3) { animation-delay: -4s; animation-duration: 13s; }
+        @keyframes move-forever { 0% { transform: translate3d(-90px,0,0); } 100% { transform: translate3d(85px,0,0); } }
+    </style>
+</head>
+<body>
+    <!-- New Particle Animation Container -->
+    <div id="particles-js"></div>
+
+    <div class="container">
+        <div class="login-card" id="auth-card">
+            <!-- Main View -->
+            <div id="main-view">
+                <div class="logo"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 9.45996L12 14.46L2 9.45996L12 4.45996L22 9.45996Z" fill="white"/><path d="M4 10.38V14.38C4 14.9323 4.21071 15.4637 4.58579 15.8388C4.96086 16.2139 5.49239 16.4246 6.04462 16.4246H18.0446C18.5969 16.4246 19.1284 16.2139 19.5035 15.8388C19.8786 15.4637 20.0893 14.9323 20.0893 14.38V10.38L12.0446 14.46L4 10.38Z" fill="white"/></svg></div>
+                <h1 id="form-title">Create Account</h1>
+                <p class="subtitle" id="form-subtitle">Sign up to get started</p>
+                <div class="role-toggle">
+                    <button id="studentBtn" class="active">👨‍🎓 Student</button>
+                    <button id="advisorBtn">👩‍🏫 Advisor</button>
+                </div>
+                <form id="auth-form">
+                    <div class="input-group" id="emailGroup"><label for="email">Email Address</label><input type="email" id="email" /></div>
+                    <div class="input-group" id="studentIdGroup"><label for="studentId">Student ID</label><input type="text" id="studentId" /></div>
+                    <div class="input-group" id="advisorEmailGroup" style="display:none;"><label for="advisorEmail">Advisor Email</label><input type="email" id="advisorEmail" /></div>
+                    <div class="input-group" id="passwordGroup"><label for="password">Password</label><input type="password" id="password" required minlength="8" /></div>
+                    <button type="submit" class="login-btn" id="main-action-btn">Create Account & Verify</button>
+                </form>
+                <div class="switch-link" id="switchLink">Already have an account? Login</div>
+            </div>
+            
+            <!-- Verification View -->
+            <div id="verify-view" style="display:none;">
+                <div class="logo"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 9.45996L12 14.46L2 9.45996L12 4.45996L22 9.45996Z" fill="white"/><path d="M4 10.38V14.38C4 14.9323 4.21071 15.4637 4.58579 15.8388C4.96086 16.2139 5.49239 16.4246 6.04462 16.4246H18.0446C18.5969 16.4246 19.1284 16.2139 19.5035 15.8388C19.8786 15.4637 20.0893 14.9323 20.0893 14.38V10.38L12.0446 14.46L4 10.38Z" fill="white"/></svg></div>
+                <h1>Verify Your Account</h1>
+                <p class="subtitle">A 6-digit code was sent to your email. Please enter it below.</p>
+                <form id="verify-form">
+                    <div id="otp-container" class="otp-input-container">
+                        <input type="text" class="otp-input" maxlength="1"><input type="text" class="otp-input" maxlength="1"><input type="text" class="otp-input" maxlength="1"><input type="text" class="otp-input" maxlength="1"><input type="text" class="otp-input" maxlength="1"><input type="text" class="otp-input" maxlength="1">
+                    </div>
+                    <button type="submit" class="login-btn" id="verifyBtn">Verify Account</button>
+                </form>
+                <div class="switch-link" id="backToLogin">Back to Main Page</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Waves SVG and Container -->
+    <div class="waves-container">
+        <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+            <defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
+            <g>
+                <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(67, 24, 255, 0.4)" />
+                <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(67, 24, 255, 0.3)" />
+                <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(134, 140, 255, 0.2)" />
+            </g>
+        </svg>
+    </div>
+
+    <!-- The main logic script remains completely unchanged -->
+    <script>
+        const API_URL = 'http://127.0.0.1:5000/api';
+        const els = { mainView: document.getElementById('main-view'), verifyView: document.getElementById('verify-view'), studentBtn: document.getElementById('studentBtn'), advisorBtn: document.getElementById('advisorBtn'), switchLink: document.getElementById('switchLink'), backToLogin: document.getElementById('backToLogin'), authForm: document.getElementById('auth-form'), verifyForm: document.getElementById('verify-form'), emailGroup: document.getElementById('emailGroup'), studentIdGroup: document.getElementById('studentIdGroup'), advisorEmailGroup: document.getElementById('advisorEmailGroup'), mainActionBtn: document.getElementById('main-action-btn'), verifyBtn: document.getElementById('verifyBtn'), otpContainer: document.getElementById('otp-container') };
+        let isLogin = false; let currentRole = 'student'; let newUserId = null;
+        function showView(view) { els.mainView.style.display = (view === 'main') ? 'block' : 'none'; els.verifyView.style.display = (view === 'verify') ? 'block' : 'none'; }
+        function updateFormDisplay() { document.getElementById('form-title').textContent = isLogin ? 'Certificate Management Portal' : 'Create Account'; document.getElementById('form-subtitle').textContent = isLogin ? 'Secure login for students and advisors' : 'Sign up to get started'; els.switchLink.textContent = isLogin ? "Don't have an account? Sign up" : 'Already have an account? Login'; els.mainActionBtn.textContent = isLogin ? `Login` : `Create Account & Verify`; const isStudent = currentRole === 'student'; els.emailGroup.style.display = isLogin ? 'none' : 'block'; els.studentIdGroup.style.display = isStudent ? 'block' : 'none'; els.advisorEmailGroup.style.display = !isStudent && isLogin ? 'block' : 'none'; document.getElementById('email').required = !isLogin; document.getElementById('studentId').required = isStudent; document.getElementById('advisorEmail').required = !isStudent && isLogin; }
+        function switchRole(role) { currentRole = role; els.studentBtn.classList.toggle('active', role === 'student'); els.advisorBtn.classList.toggle('active', role === 'advisor'); updateFormDisplay(); }
+        els.studentBtn.addEventListener('click', () => switchRole('student')); els.advisorBtn.addEventListener('click', () => switchRole('advisor')); els.switchLink.addEventListener('click', () => { isLogin = !isLogin; updateFormDisplay(); }); els.backToLogin.addEventListener('click', () => { isLogin = true; updateFormDisplay(); showView('main'); });
+        els.authForm.addEventListener('submit', async (e) => { e.preventDefault(); els.mainActionBtn.disabled = true; const payload = { role: currentRole, password: document.getElementById('password').value }; try { if (isLogin) { els.mainActionBtn.textContent = 'Logging In...'; payload.identifier = (currentRole === 'student') ? document.getElementById('studentId').value.trim() : document.getElementById('advisorEmail').value.trim(); const response = await fetch(`${API_URL}/auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); const data = await response.json(); if (!response.ok) throw new Error(data.msg || 'Login failed.'); localStorage.setItem('accessToken', data.access_token); localStorage.setItem('userRole', data.role); window.location.href = data.role === 'student' ? 'home.html' : 'advisor.html'; } else { els.mainActionBtn.textContent = 'Registering...'; payload.email = document.getElementById('email').value.trim(); if (currentRole === 'student') payload.student_id = document.getElementById('studentId').value.trim(); const response = await fetch(`${API_URL}/auth/register`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) }); const data = await response.json(); if (!response.ok) throw new Error(data.msg || 'Registration failed.'); newUserId = data.userId; alert(data.msg); showView('verify'); } } catch (error) { alert(`Error: ${error.message}`); } finally { els.mainActionBtn.disabled = false; updateFormDisplay(); } });
+        els.verifyForm.addEventListener('submit', async (e) => { e.preventDefault(); els.verifyBtn.disabled = true; els.verifyBtn.textContent = 'Verifying...'; let code = ''; els.otpContainer.querySelectorAll('.otp-input').forEach(input => code += input.value); if (code.length < 6) { alert('Please enter the full 6-digit code.'); els.verifyBtn.disabled = false; els.verifyBtn.textContent = 'Verify Account'; return; } try { const response = await fetch(`${API_URL}/auth/verify`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: newUserId, code: code }) }); const data = await response.json(); if (!response.ok) throw new Error(data.msg || 'Verification failed.'); alert(data.msg); isLogin = true; updateFormDisplay(); showView('main'); } catch (error) { alert(`Verification Failed: ${error.message}`); } finally { els.verifyBtn.disabled = false; els.verifyBtn.textContent = 'Verify Account'; } });
+        els.otpContainer.addEventListener('input', (e) => { const target = e.target; if (isNaN(target.value)) { target.value = ''; return; } if (target.value !== '') { const next = target.nextElementSibling; if (next) next.focus(); } }); els.otpContainer.addEventListener('keyup', (e) => { if (e.key === 'Backspace' || e.key === 'Delete') { const prev = e.target.previousElementSibling; if (prev) prev.focus(); } }); els.otpContainer.addEventListener('paste', (e) => { e.preventDefault(); const text = e.clipboardData.getData('text').slice(0, 6); const inputs = els.otpContainer.querySelectorAll('.otp-input'); inputs.forEach((input, i) => input.value = text[i] || ''); const last = text.length === 6 ? inputs[5] : inputs[text.length]; if (last) last.focus(); });
+        updateFormDisplay();
+    </script>
+    
+    <!-- --- *** NEW SCRIPT TAGS FOR THE PARTICLE ANIMATION *** --- -->
+    <!-- 1. The library itself -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <!-- 2. The configuration for the "Grok" style -->
+    <script>
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#ffffff" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": false },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 },
+                "move": { "enable": true, "speed": 4, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": {
+                    "repulse": { "distance": 100, "duration": 0.4 },
+                    "push": { "particles_nb": 4 }
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard - Student Certificate Portal</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { height: 100%; font-family: "Segoe UI", sans-serif; }
+    body { background: #090a0f; overflow: hidden; color: #fff; position: relative; }
+    
+    /* --- *** ANIMATION CONTAINERS *** --- */
+    #particles-js, #stars, #shooting-stars { 
+        position: fixed; 
+        top: 0; left: 0; 
+        width: 100%; height: 100%; 
+        z-index: 1; /* All animations sit behind the content */
+        pointer-events: none; 
+    }
+    
+    .star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; opacity: 0.8; }
+    .shooting-star { position: absolute; width: 2px; height: 80px; background: linear-gradient(-45deg, white, rgba(255,255,255,0)); border-radius: 50%; opacity: 0.7; transform: rotate(45deg); animation: shoot 3s linear forwards; }
+    @keyframes shoot { 0% { transform: translate(0,0) rotate(45deg); opacity: 1; } 70% { opacity: 1; } 100% { transform: translate(-800px, 800px) rotate(45deg); opacity: 0; } }
+    
+    .navbar { height: 60px; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; color: #fff; z-index: 100; position: relative; }
+    .navbar h1 { font-size: 1.2rem; }
+    .navbar button { background: #00f7ff; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+    .navbar button:hover { background: #00d4ff; }
+    .container { display: flex; height: calc(100vh - 60px); position: relative; z-index: 100; } /* Ensures content is on top */
+    .sidebar { width: 220px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); display: flex; flex-direction: column; padding: 1rem; }
+    .sidebar h3 { color: #fff; margin-bottom: 1rem; text-align: center; }
+    .menu-item { padding: 12px; color: #fff; margin: 6px 0; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
+    .menu-item:hover { background: rgba(255,255,255,0.2); transform: translateX(5px); }
+    .menu-item.active { background: rgba(0,247,255,0.3); }
+    .content { flex: 1; padding: 2rem; color: #fff; overflow-y: auto; }
+    .card { background: rgba(255,255,255,0.08); backdrop-filter: blur(8px); padding: 1.5rem; border-radius: 15px; margin-bottom: 1.5rem; animation: fadeSlide 0.6s ease; }
+    @keyframes fadeSlide { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .stats { display: flex; gap: 20px; margin-bottom: 20px; }
+    .stat-card { flex: 1; padding: 20px; border-radius: 12px; color: #fff; display: flex; flex-direction: column; justify-content: center; font-weight: bold; }
+    .stat-card h2 { margin: 0; font-size: 24px; }
+    .stat-card span { font-size: 14px; opacity: 0.9; }
+    .blue { background: #2563eb; }
+    .green { background: #16a34a; }
+    .orange { background: #f97316; }
+    .certificates { display: flex; gap: 20px; flex-wrap: wrap; }
+    .certificate { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); flex: 1 1 300px; position: relative; display: flex; flex-direction: column; }
+    .certificate .tags { display: flex; justify-content: space-between; margin-bottom: 10px; }
+    .tag { padding: 3px 8px; border-radius: 8px; font-size: 12px; font-weight: 600; color: #fff; }
+    .tag.blue { background: #2563eb; }
+    .tag.green { background: #16a34a; }
+    .tag.orange { background-color: #f97316; }
+    .tag.red { background-color: #ef4444; }
+    .certificate h4 { margin: 5px 0 10px 0; font-size: 16px; flex-grow: 1; }
+    .certificate p { margin: 2px 0; font-size: 14px; color: #f0f0f0; }
+    .certificate .grace { margin-top: 10px; font-weight: bold; color: #16a34a; }
+    .certificate .actions { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; }
+    .action-btn { text-decoration: none; text-align: center; display: block; width: 100%; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; transition: background 0.3s; }
+    .action-btn.view { background: #0284c7; color: white; }
+    .action-btn.view:hover { background: #0369a1; }
+    .action-btn.delete { background: #ef4444; color: white; }
+    .action-btn.delete:hover { background: #dc2626; }
+    .upload-form { max-width: 520px; margin: 0 auto; background: rgba(255,255,255,0.12); border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); animation: fadeSlide 0.6s ease; padding: 30px; }
+    .upload-form h2 { text-align: center; color: #fff; margin-bottom: 20px; }
+    .upload-form label { display: block; margin-top: 20px; font-weight: bold; color: #e0e0e0; font-size: 14px; }
+    .upload-form input, .upload-form select, .upload-form button, .upload-form textarea { width: 100%; padding: 10px; margin-top: 8px; border-radius: 8px; font-size: 16px; background: rgba(255,255,255,0.1); color: #fff; border: none; transition: all 0.3s ease; resize: vertical; }
+    .upload-form input:focus, .upload-form select:focus, .upload-form textarea:focus { outline: none; background: rgba(255,255,255,0.15); box-shadow: 0 0 8px rgba(0,247,255,0.5); }
+    .upload-form input[type="file"] { padding: 10px; background: rgba(255,255,255,0.08); cursor: pointer; }
+    .upload-form input[type="file"]::-webkit-file-upload-button { background: #2563eb; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: background 0.3s ease; }
+    .upload-form input[type="file"]::-webkit-file-upload-button:hover { background: #1e4fc1; }
+    .upload-form button { background-color: #007bff; color: white; border: none; cursor: pointer; transition: 0.3s; margin-top: 20px; background: linear-gradient(90deg, #2563eb, #00f7ff); font-weight: 600; position: relative; overflow: hidden; }
+    .upload-form button:hover { background-color: #0056b3; background: linear-gradient(90deg, #1e4fc1, #00d4ff); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,247,255,0.4); }
+    .hidden { display: none; }
+    .upload-form input::placeholder, .upload-form textarea::placeholder, .upload-form select:invalid { color: #a0a0a0; }
+    .drop-zone { border: 2px dashed rgba(0, 247, 255, 0.5); border-radius: 8px; padding: 20px; text-align: center; margin-top: 8px; transition: all 0.3s ease; background: rgba(0, 247, 255, 0.05); cursor: pointer; }
+    .drop-zone.dragover { border-color: #00f7ff; background: rgba(0, 247, 255, 0.1); transform: scale(1.02); }
+    .drop-zone p { margin: 10px 0; color: #e0e0e0; font-size: 14px; }
+    .drop-zone input[type="file"] { display: none; }
+    .drop-zone .file-info { margin-top: 10px; font-size: 12px; color: #a0a0a0; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    th { background: rgba(255,255,255,0.05); font-weight: 600; }
+    .upload-btn { background: linear-gradient(90deg, #2563eb, #00f7ff); color: #fff; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; display: block; margin: 20px auto 0; }
+    .upload-btn:hover { background: linear-gradient(90deg, #1e4fc1, #00d4ff); transform: translateY(-2px); }
+    .modal { display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
+    .modal-content { background-color: rgba(255,255,255,0.1); backdrop-filter: blur(10px); margin: 5% auto; padding: 2rem; border-radius: 15px; width: 80%; max-width: 600px; max-height: 80vh; overflow-y: auto; color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+    .modal h2 { text-align: center; margin-bottom: 1rem; color: #00f7ff; }
+    .rules-list { list-style: none; margin: 0; padding: 0; }
+    .rules-list li { margin-bottom: 1rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border-left: 4px solid #00f7ff; }
+    .rules-list input[type="checkbox"] { margin-right: 10px; transform: scale(1.2); }
+    .rules-list label { display: flex; align-items: flex-start; cursor: pointer; font-size: 14px; line-height: 1.4; }
+    .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.5rem; }
+    .modal-btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+    .modal-btn.primary { background: linear-gradient(90deg, #2563eb, #00f7ff); color: #fff; }
+    .modal-btn.primary:hover { background: linear-gradient(90deg, #1e4fc1, #00d4ff); }
+    .modal-btn.secondary { background: rgba(255,255,255,0.1); color: #fff; }
+    .modal-btn.secondary:hover { background: rgba(255,255,255,0.2); }
+    .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+    .close:hover { color: #fff; }
+    .modal input[type="password"] { width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px; background: rgba(255,255,255,0.1); color: #fff; border: none; font-size: 16px; transition: all 0.3s ease; }
+    .modal input[type="password"]:focus { outline: none; background: rgba(255,255,255,0.15); box-shadow: 0 0 8px rgba(0,247,255,0.5); }
+    .modal input[type="password"]::placeholder { color: #a0a0a0; }
+  </style>
+</head>
+<body>
+  <div id="particles-js"></div>
+  <div id="stars"></div>
+  <div id="shooting-stars"></div>
+  
+  <div class="navbar"><h1>Certificate Management Portal</h1><div><span id="roleLabel">Role: Student</span><button onclick="logout()">Logout</button></div></div>
+  <div class="container"><div class="sidebar" id="sidebar"></div><div class="content" id="content"></div></div>
+  <div id="rulesModal" class="modal"><div class="modal-content"><span class="close" onclick="closeRulesModal()">&times;</span><h2>Grace Marks Rules and Guidelines</h2><p style="text-align: center; margin-bottom: 1.5rem; opacity: 0.9;">Please read and acknowledge all rules before proceeding with the upload.</p><ul class="rules-list" id="rulesList"></ul><div class="modal-buttons"><button class="modal-btn secondary" onclick="closeRulesModal()">Cancel</button><button class="modal-btn primary" id="proceedBtn" onclick="proceedWithUpload()" disabled>Proceed to Upload</button></div></div></div>
+  <div id="deleteModal" class="modal"><div class="modal-content"><span class="close" onclick="closeDeleteModal()">&times;</span><h2>Confirm Delete Certificate</h2><p style="text-align: center; margin-bottom: 1rem; opacity: 0.9;">This action cannot be undone. Enter your password to verify.</p><input type="password" id="deletePwd" placeholder="Enter your password"><div class="modal-buttons"><button class="modal-btn secondary" onclick="closeDeleteModal()">Cancel</button><button class="modal-btn primary" id="confirmDeleteBtn" onclick="confirmDelete()">Delete</button></div></div></div>
+
+  <script>
+    const API_URL = 'http://127.0.0.1:5000';
+    const token = localStorage.getItem('accessToken');
+    if (!token) { window.location.href = 'login.html'; }
+
+    const sidebar = document.getElementById("sidebar");
+    const content = document.getElementById("content");
+    let studentProfile = null;
+
+    sidebar.innerHTML = `<h3>Menu</h3><div class="menu-item active" data-page="dashboard" onclick="loadContent('dashboard', this)">Dashboard</div><div class="menu-item" data-page="upload" onclick="loadContent('upload', this)">Upload Certificate</div><div class="menu-item" data-page="mycerts" onclick="loadContent('mycerts', this)">My Certificates</div>`;
+    const graceRules = ["(i) The Guidelines marks shall not be shown separately in the grade card.","(ii) The grace marks shall not be shown separately in the grade card for a particular semester.","(iii) The maximum cumulative grace mark awarded to the students in a particular semester for all the activities such as Sports & Games, cultural activities, Technical competitions and Seva activities (including NSS) put together should not exceed 20 marks.","(iv) The grace marks awarded shall not be considered for ranking.","(v) The grace marks once distributed on the request of the student will not be reopened.","(vi) The grace marks are awarded for theory papers. However, if the grade marks are below the required minimum for a pass in viva-voce, projects and practical's, the grace marks may be used for non-theory courses.","(vii) The student shall claim the grace marks only for the semester in which the event concluded/results declared."];
+    async function fetchWithAuth(endpoint, options = {}) { const headers = { ...options.headers, 'Authorization': `Bearer ${token}` }; const response = await fetch(`${API_URL}${endpoint}`, { ...options, headers }); if (response.status === 401) { logout(); throw new Error('Session expired. Please login again.'); } if (!response.ok) { const errorData = await response.json().catch(() => ({})); throw new Error(errorData.msg || 'An API error occurred.'); } try { return await response.json(); } catch (e) { return {}; } }
+    async function loadContent(page, element) { document.querySelectorAll(".menu-item").forEach(i => i.classList.remove("active")); if (element) element.classList.add("active"); try { if (page === "dashboard" || page === "mycerts") { const certificates = await fetchWithAuth('/api/students/my-certificates'); renderCertificates(page, certificates); } else if (page === "upload") { renderUploadForm(); } } catch (error) { console.error("Error loading content:", error); alert(`Error: ${error.message}`); } }
+    function showUploadPage() { loadContent('upload', document.querySelector('.menu-item[data-page="upload"]')); }
+    function renderCertificates(page, certificates) { if (page === 'dashboard') { const certs = Array.isArray(certificates) ? certificates : []; const total = certs.length; const totalGrace = certs.reduce((sum, c) => sum + (c.allocated_marks || c.potential_marks || 0), 0); const approved = certs.filter(c => c.status === 'Approved').length; let html = `<div class="card"><h2>Student Dashboard</h2><div class="stats"><div class="stat-card blue"><h2>${total}</h2><span>Total Certificates</span></div><div class="stat-card green"><h2>${totalGrace}</h2><span>Grace Marks</span></div><div class="stat-card orange"><h2>${approved}</h2><span>Approved</span></div></div><h3>My Certificates</h3>`; if (total === 0) { html += `<p>No certificates uploaded yet.</p>`; } else { html += `<div class="certificates">`; certs.forEach(c => { const statusColors = { 'Pending': 'orange', 'Approved': 'green', 'Rejected': 'red' }; html += `<div class="certificate"><div class="tags"><span class="tag blue">${c.type}</span><span class="tag ${statusColors[c.status] || 'blue'}">${c.status}</span></div><h4>${c.category}</h4><p><b>Date:</b> ${new Date(c.date).toLocaleDateString()}</p><p><b>Venue:</b> ${c.venue}</p><p class="grace">Grace Marks: ${c.allocated_marks !== null ? c.allocated_marks : (c.potential_marks || 0)}</p><div class="actions"><a href="${API_URL}/certificates/${c.filename}" target="_blank" rel="noopener noreferrer" class="action-btn view">View Certificate</a><button class="action-btn delete" onclick="showDeleteModal('${c.id}')">Delete Certificate</button></div></div>`; }); html += `</div>`; } html += `<button class="upload-btn" onclick="showUploadPage()">+ Upload Certificate</button></div>`; content.innerHTML = html; } else { /* My Certificates (Table View) logic */ } }
+    
+    function renderUploadForm() { 
+        const studentRegNo = studentProfile ? studentProfile.student_id : ''; 
+        content.innerHTML = `<div class="card"><form id="certificateForm" class="upload-form"><h2>Upload New Certificate</h2><label for="name">Student Name:</label><input type="text" id="name" placeholder="Enter your full name" required><label for="regno">Register Number:</label><input type="text" id="regno" value="${studentRegNo}" readonly required><label for="school">School:</label><select id="school" required><option value="">-- Select --</option><option value="computing">Amrita School of Computing</option><option value="engineering">Amrita School of Engineering</option></select><label for="branch">Branch:</label><select id="branch" required><option value="">-- Select School First --</option></select><label for="year">Academic Year:</label><select id="year" required><option value="">-- Select --</option></select><label for="batch">Batch:</label><select id="batch" required><option value="">-- Select --</option></select><label for="sem">Semester:</label><select id="sem" required><option value="">-- Select --</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option></select><label for="date">Date of Certificate:</label><input type="date" id="date" required><label for="type">Certificate Type:</label><select id="type" required><option value="">-- Select --</option><option value="Technical">Technical</option><option value="Sports">Sports</option><option value="Cultural">Cultural</option><option value="Amma Service">Amma Service</option><option value="Research Paper">Research Paper</option></select><label for="venue">Venue:</label><input type="text" id="venue" placeholder="e.g., Chennai" required><label for="category">Category:</label><select id="category" required><option value="">-- Select Type First --</option></select><div id="participationContainer" class="hidden"><label for="participation">Participation / Prize:</label><select id="participation" required><option value="">-- Select Category First --</option></select></div><div id="otherDescriptionContainer" class="hidden"><label for="description">Describe Other Category:</label><textarea id="description" placeholder="Please describe the category..." rows="3"></textarea></div><label>Upload File:</label><div class="drop-zone" id="dropZone"><p>Drag and drop your certificate here or click to browse</p><input type="file" id="certificate" accept=".pdf,.jpg,.png,.jpeg" required><div class="file-info" id="fileInfo"></div></div><button id="submitBtn" type="submit">Upload</button></form></div>`; 
+        initializeUploadForm(); 
+        initializeDragAndDrop(); 
+    }
+
+    function initializeUploadForm() { 
+        const yearSelect = document.getElementById("year"); 
+        const batchSelect = document.getElementById("batch"); 
+        if (yearSelect && batchSelect) { const currentYear = new Date().getFullYear(); for (let i = currentYear - 4; i <= currentYear + 4; i++) { yearSelect.innerHTML += `<option value="${i}-${i+1}">${i}-${i+1}</option>`; batchSelect.innerHTML += `<option value="${i}">${i}</option>`; } } 
+        const schoolSelect = document.getElementById("school"); 
+        if (schoolSelect) { schoolSelect.addEventListener("change", function() { const branches = { computing: ["AIE", "AIDS", "CSE", "CYS"], engineering: ["MECH", "CCE", "ECE"] }; const branchSelect = document.getElementById("branch"); branchSelect.innerHTML = '<option value="">-- Select Branch --</option>'; if (branches[this.value]) { branches[this.value].forEach(br => branchSelect.innerHTML += `<option value="${br}">${br}</option>`); } }); } 
+        
+        const typeSelect = document.getElementById("type"); 
+        const categorySelect = document.getElementById("category"); 
+        const participationSelect = document.getElementById("participation");
+        const participationContainer = document.getElementById("participationContainer");
+
+        if (typeSelect && categorySelect && participationSelect) { 
+            const prizeOptions = ['First Prize', 'Second Prize', 'Third Prize', 'Participation'];
+            const techPrizeOptions = ['First Prize', 'Second Prize', 'Third Prize'];
+
+            // --- MODIFIED: Added "Others" to Research Paper category ---
+            const categoryMap = { 
+                "Technical": ["National Technical Competitions", "International Technical Competitions", "Others (Workshop, Symposium, etc)"], 
+                "Sports": ["South Zone (State) Inter-University", "All India Inter University", "Others"], 
+                "Cultural": ["South Zone (State) Inter-University", "All India Inter University", "Others"], 
+                "Amma Service": ["Ashram Related Activities (AMMA's B'Day, Tour seva)", "Disaster Relief Activities", "Others"], 
+                "Research Paper": ["Scopus Indexed Publication", "Others"] 
+            }; 
+
+            typeSelect.addEventListener("change", function() { 
+                categorySelect.innerHTML = '<option value="">-- Select --</option>'; 
+                participationSelect.innerHTML = '<option value="">-- Select Category First --</option>';
+                (categoryMap[this.value] || []).forEach(cat => { categorySelect.innerHTML += `<option value="${cat}">${cat}</option>`; }); 
+                
+                if (this.value === 'Amma Service' || this.value === 'Research Paper') {
+                    participationContainer.classList.add('hidden');
+                    participationSelect.required = false;
+                    participationSelect.innerHTML = `<option value="N/A" selected>N/A</option>`;
+                } else {
+                    participationContainer.classList.remove('hidden');
+                    participationSelect.required = true;
+                }
+
+                document.getElementById("otherDescriptionContainer").classList.add("hidden"); 
+                document.getElementById("description").required = false; 
+            }); 
+
+            categorySelect.addEventListener("change", function() {
+                const selectedType = typeSelect.value;
+
+                if (selectedType !== 'Amma Service' && selectedType !== 'Research Paper') {
+                    const options = (selectedType === 'Technical' && !this.value.startsWith('Others')) ? techPrizeOptions : prizeOptions;
+                    participationSelect.innerHTML = '<option value="">-- Select --</option>';
+                    options.forEach(opt => participationSelect.innerHTML += `<option value="${opt}">${opt}</option>`);
+                }
+
+                const otherDescContainer = document.getElementById("otherDescriptionContainer"); 
+                const descriptionInput = document.getElementById("description"); 
+                if (this.value.startsWith("Others")) { 
+                    otherDescContainer.classList.remove("hidden"); 
+                    descriptionInput.required = true; 
+                } else { 
+                    otherDescContainer.classList.add("hidden"); 
+                    descriptionInput.required = false; 
+                } 
+            }); 
+        } 
+        
+        const form = document.getElementById("certificateForm"); 
+        if (form) { 
+            form.addEventListener("submit", async e => { 
+                e.preventDefault(); 
+                const certFile = document.getElementById('certificate').files[0]; 
+                if (!certFile) { alert("Please select a file to upload."); return; } 
+                
+                const formData = new FormData(); 
+                const fields = ["name", "regno", "school", "branch", "year", "batch", "sem", "date", "type", "venue", "participation", "category", "description"]; 
+                fields.forEach(field => { 
+                    const el = document.getElementById(field); 
+                    if (el && el.value) {
+                        formData.append(field, el.value); 
+                    }
+                }); 
+                formData.append('certificate', certFile); 
+                formDataToUpload = formData; 
+                showRulesModal(); 
+            }); 
+        } 
+    }
+
+    function initializeDragAndDrop() { const dropZone = document.getElementById('dropZone'); if (!dropZone) return; const fileInput = document.getElementById('certificate'); const fileInfo = document.getElementById('fileInfo'); const preventDefaults = e => { e.preventDefault(); e.stopPropagation(); }; ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => dropZone.addEventListener(eventName, preventDefaults, false)); const highlight = () => dropZone.classList.add('dragover'); const unhighlight = () => dropZone.classList.remove('dragover'); ['dragenter', 'dragover'].forEach(eventName => dropZone.addEventListener(eventName, highlight, false)); ['dragleave', 'drop'].forEach(eventName => dropZone.addEventListener(eventName, unhighlight, false)); dropZone.addEventListener('drop', e => { const files = e.dataTransfer.files; if (files.length > 0) { fileInput.files = files; fileInfo.textContent = `Selected: ${files[0].name}`; }}, false); dropZone.addEventListener('click', () => fileInput.click()); fileInput.addEventListener('change', () => { if (fileInput.files.length > 0) fileInfo.textContent = `Selected: ${fileInput.files[0].name}`; }); }
+    function showRulesModal() { const modal = document.getElementById('rulesModal'); const rulesList = document.getElementById('rulesList'); rulesList.innerHTML = ''; graceRules.forEach((rule) => { rulesList.innerHTML += `<li><label><input type="checkbox" class="rule-checkbox">${rule}</label></li>`; }); document.querySelectorAll('.rule-checkbox').forEach(checkbox => checkbox.addEventListener('change', checkAllRules)); modal.style.display = 'block'; document.getElementById('proceedBtn').disabled = true; }
+    function closeRulesModal() { document.getElementById('rulesModal').style.display = 'none'; }
+    function checkAllRules() { document.getElementById('proceedBtn').disabled = !Array.from(document.querySelectorAll('.rule-checkbox')).every(cb => cb.checked); }
+    let formDataToUpload;
+    
+    function proceedWithUpload() { 
+        closeRulesModal(); 
+        const submitBtn = document.getElementById('submitBtn'); 
+        submitBtn.disabled = true; 
+        submitBtn.textContent = 'Uploading...'; 
+        fetch(`${API_URL}/api/students/certificates`, { 
+            method: 'POST', 
+            headers: { 'Authorization': `Bearer ${token}` }, 
+            body: formDataToUpload 
+        })
+        .then(response => { 
+            if (!response.ok) { 
+                return response.json().then(data => { throw new Error(data.msg || 'Upload failed'); }); 
+            } 
+            return response.json(); 
+        })
+        .then(data => { 
+            alert('Certificate uploaded successfully!'); 
+            loadContent('dashboard', document.querySelector('.menu-item[data-page="dashboard"]')); 
+        })
+        .catch(error => { 
+            let errorMessage = `Error: ${error.message}.`;
+            if (error.message.includes("Failed to fetch")) {
+                errorMessage += "\n\nPlease ensure the backend server is running and accessible at " + API_URL;
+            }
+            alert(errorMessage);
+        })
+        .finally(() => { 
+            submitBtn.disabled = false; 
+            submitBtn.textContent = 'Upload'; 
+        }); 
+    }
+
+    let currentDeleteId;
+    function showDeleteModal(id) { 
+        currentDeleteId = id; 
+        document.getElementById('deleteModal').style.display = 'block'; 
+        document.getElementById('deletePwd').value = ''; 
+    }
+
+    function closeDeleteModal() { 
+        document.getElementById('deleteModal').style.display = 'none'; 
+    }
+
+    async function confirmDelete() { 
+        const password = document.getElementById('deletePwd').value; 
+        if (!password) { 
+            alert('Password is required.'); 
+            return; 
+        } 
+        try { 
+            await fetchWithAuth(`/api/students/certificates/${currentDeleteId}`, { 
+                method: 'DELETE', 
+                headers: { 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({ password }) 
+            }); 
+            alert('Certificate deleted!'); 
+            closeDeleteModal(); 
+            loadContent('dashboard', document.querySelector('.menu-item.active')); 
+        } catch (error) { 
+            alert(`Error: ${error.message}`); 
+        } 
+    }
+
+    function logout() { localStorage.removeItem('accessToken'); localStorage.removeItem('userRole'); window.location.href = "login.html"; }
+    async function initializePage() { try { studentProfile = await fetchWithAuth('/api/students/profile'); loadContent('dashboard', document.querySelector('.menu-item[data-page="dashboard"]')); } catch (error) { console.error("Initialization failed:", error); alert("Could not load your profile. Please try logging in again."); } }
+    initializePage();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script>
+    if (document.getElementById('particles-js')) {
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#ffffff" },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.4, "random": true },
+                "size": { "value": 2, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.2, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": false }, "onclick": { "enable": false } } },
+            "retina_detect": true
+        });
+    }
+  </script>
+</body>
+</html>

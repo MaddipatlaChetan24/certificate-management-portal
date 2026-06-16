@@ -1,0 +1,8 @@
+Flask
+Flask-PyMongo
+PyMongo
+Flask-JWT-Extended
+python-dotenv
+Werkzeug
+flask-cors
+Flask-Mail
