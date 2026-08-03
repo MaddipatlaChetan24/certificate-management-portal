@@ -1,125 +1,295 @@
+<div align="center">
+
 # Certificate Management Portal
 
-A web-based platform for students to submit certificates for extracurricular achievements and request grace marks, and for faculty advisors to review submissions, manage student records, and generate consolidated reports.
+**A secure web-based platform for managing student certificates, grace marks, and advisor approvals with OTP authentication and automated report generation.**
 
-## Overview
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](https://python.org)
+[![Flask](https://img.shields.io/badge/Flask-000000?logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-47A248?logo=mongodb&logoColor=white)](https://mongodb.com)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES6-F7DF1E?logo=javascript&logoColor=black)](https://developer.mozilla.org)
 
-Students upload proof of participation in technical competitions, sports, cultural events, Amma Service/Seva activities, or research publications. Each submission is tagged with academic details (school, branch, year, batch, semester) and routed to an advisor, who reviews the certificate, assigns grace marks, and approves or rejects it. Advisors can also browse all students, act in bulk, and export filtered reports as PDF, Excel, or CSV.
+</div>
 
-## Features
+---
 
-### Student
-- Register and log in with a student ID, secured by email OTP verification
-- Upload a certificate (PDF/JPG/PNG) via drag-and-drop, with school, branch, year, batch, semester, type, category, and prize/participation details
-- Must read and acknowledge the grace marks policy before each upload
-- Dashboard showing total certificates, accumulated grace marks, and approval count
-- View certificate status (Pending / Approved / Rejected) and open the uploaded file
-- Delete a certificate, confirmed by re-entering their password
+# Overview
 
-### Advisor
-- Register and log in with an advisor email, secured by email OTP verification
-- Dashboard summary: total certificates, pending reviews, approvals, active students
-- "All Students" view with per-student certificate/pending counts and bulk Approve All / Reject All actions
-- "Approve Certificates" view to review individual submissions, adjust suggested grace marks, and approve or reject
-- Search and filter certificates by student name, academic year, batch, school, branch, type, status, and semester
-- "Reports" view summarizing approved certificates and grace marks per student, with a bar chart
-- "Generate Report" view to export a filtered certificate list or cumulative student report as PDF, Excel, or CSV, with an institution letterhead
+The **Certificate Management Portal** is a secure web application designed to simplify the submission, verification, and management of student certificates for extracurricular achievements.
 
-## Tech Stack
+Students can upload certificates for technical events, sports, cultural activities, research publications, and community service, while faculty advisors can review submissions, assign grace marks, approve or reject applications, and generate institutional reports.
 
-- **Backend:** Python, Flask, Flask-PyMongo / PyMongo, Flask-JWT-Extended, Flask-CORS, Flask-Mail, Werkzeug, python-dotenv
-- **Database:** MongoDB
-- **Frontend:** HTML, CSS, vanilla JavaScript (no framework)
-- **Frontend libraries (CDN):** particles.js (background animation), Chart.js (grace marks chart), jsPDF + jspdf-autotable (client-side PDF generation)
+The system includes **OTP-based authentication**, **role-based access control**, **certificate tracking**, **bulk approval workflows**, and **PDF/Excel/CSV report generation**.
 
-## Project Structure
+---
 
-This layout is inferred from the files provided; adjust paths to match your actual backend code.
+# Features
 
+| Module | Description |
+|----------|-------------|
+| **Student Portal** | Upload certificates, monitor approval status, and track accumulated grace marks. |
+| **Advisor Portal** | Review submissions, allocate grace marks, approve/reject certificates, and manage students. |
+| **OTP Authentication** | Secure login and registration using email verification. |
+| **Grace Marks Management** | Automated allocation and tracking of grace marks based on institutional policies. |
+| **Advanced Search & Filters** | Search certificates by student, branch, semester, event type, status, and more. |
+| **Report Generation** | Export institutional reports in PDF, Excel, and CSV formats. |
+| **Interactive Dashboard** | Charts and statistics for certificates, approvals, and student activity. |
+
+---
+
+# System Architecture
+
+```mermaid
+flowchart LR
+
+A[Student Registration] --> B[OTP Verification]
+B --> C[Student Dashboard]
+
+C --> D[Upload Certificate]
+D --> E[(MongoDB)]
+
+E --> F[Advisor Dashboard]
+
+F --> G[Review Certificate]
+G --> H{Approve / Reject}
+
+H --> I[Assign Grace Marks]
+I --> J[Generate Reports]
+
+J --> K[PDF / Excel / CSV]
 ```
+
+---
+
+# Tech Stack
+
+| Category | Technologies |
+|----------|--------------|
+| Backend | Python, Flask |
+| Database | MongoDB |
+| Authentication | Flask-JWT, Email OTP |
+| Frontend | HTML5, CSS3, JavaScript |
+| Charts | Chart.js |
+| PDF Reports | jsPDF |
+| Email | Flask-Mail |
+| Environment | python-dotenv |
+
+---
+
+# Project Structure
+
+```text
 certificate-management-portal/
-├── app.py                   # Flask application entry point (not included here)
+│
+├── app.py
 ├── requirements.txt
-├── .env                     # Environment variables (not committed)
-├── login.html               # Auth: student/advisor register, OTP verify, login
-├── home.html                 # Student dashboard, upload form, certificate list
-├── advisor.html              # Advisor dashboard, review queue, reports
-└── static/certificates/      # Uploaded files, served at /certificates/<filename>
+├── .env
+│
+├── templates/
+│   ├── login.html
+│   ├── home.html
+│   └── advisor.html
+│
+├── static/
+│   ├── css/
+│   ├── js/
+│   └── certificates/
+│
+└── README.md
 ```
+
+---
+
+# Quick Start
 
 ## Prerequisites
 
-- Python 3.9+
-- A MongoDB instance (local or MongoDB Atlas)
-- An SMTP-capable email account for sending OTP codes (e.g. Gmail with an app password)
+- Python 3.10+
+- MongoDB
+- SMTP Email Account
 
-## Setup & Installation
+---
 
-1. Clone the repository and enter the project folder.
+## Installation
 
-2. Create a virtual environment and install dependencies:
-   ```
-   python -m venv venv
-   source venv/bin/activate   # Windows: venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
+Clone the repository
 
-3. Create a `.env` file in the project root:
-   ```
-   MONGO_URI=mongodb://localhost:27017/certificate_portal
-   JWT_SECRET_KEY=your-secret-key
-   MAIL_SERVER=smtp.gmail.com
-   MAIL_PORT=587
-   MAIL_USE_TLS=True
-   MAIL_USERNAME=your-email@gmail.com
-   MAIL_PASSWORD=your-app-password
-   MAIL_DEFAULT_SENDER=your-email@gmail.com
-   ```
+```bash
+git clone https://github.com/YOUR_USERNAME/certificate-management-portal.git
 
-4. Run the backend:
-   ```
-   flask run
-   ```
-   The frontend expects the API at `http://127.0.0.1:5000` by default.
+cd certificate-management-portal
+```
 
-5. Open `login.html` in a browser, register an account, verify the OTP sent to your email, then log in. Students land on `home.html`; advisors land on `advisor.html`.
+Create a virtual environment
 
-## API Reference
+```bash
+python -m venv .venv
 
-Endpoints below are inferred from the frontend's `fetch` calls. Confirm exact request/response shapes against your backend implementation.
+source .venv/bin/activate
+```
 
-| Method | Endpoint | Description |
-|---|---|---|
-| POST | `/api/auth/register` | Register a new student or advisor account |
-| POST | `/api/auth/verify` | Verify the OTP code sent to email |
-| POST | `/api/auth/login` | Log in and receive a JWT access token |
-| GET | `/api/students/profile` | Get the logged-in student's profile |
-| GET | `/api/students/my-certificates` | List the logged-in student's certificates |
-| POST | `/api/students/certificates` | Upload a new certificate (multipart form) |
-| DELETE | `/api/students/certificates/<id>` | Delete a certificate (password required) |
-| GET | `/api/advisors/all-certificates` | List all certificates across students |
-| POST | `/api/advisors/review-certificate/<id>` | Approve or reject a certificate, with allocated marks |
-| POST | `/api/advisors/approve-all-by-id/<student_id>` | Approve all pending certificates for a student |
-| POST | `/api/advisors/reject-all-by-id/<student_id>` | Reject all pending certificates for a student |
-| GET | `/certificates/<filename>` | Serve an uploaded certificate file |
+Install dependencies
 
-## Grace Marks Policy
+```bash
+pip install -r requirements.txt
+```
 
-Summarized from the rules students must acknowledge before uploading:
+---
 
-- Grace marks aren't shown separately on the grade card.
-- Total grace marks across all activities (sports, cultural, technical, Seva/NSS) are capped per semester.
-- Grace marks don't factor into student ranking.
-- Once awarded, an allocation can't be reopened on request.
-- Grace marks apply to theory papers, except where used to cover a shortfall in viva-voce, projects, or practicals.
-- Claims must be made in the semester the event concluded or results were declared.
+## Environment Variables
 
-## Before Deploying
+Create a `.env` file.
 
-- `API_URL` is hardcoded to `http://127.0.0.1:5000` in `login.html`, `home.html`, and `advisor.html` — update this for any non-local deployment.
-- The institution logo used in generated PDF reports loads from an external `i.ibb.co` URL — consider self-hosting it for reliability.
-- Certificate deletion requires a password in the UI; make sure the same check is enforced server-side.
+```env
+MONGO_URI=
 
-## License
+JWT_SECRET_KEY=
 
-Add your preferred license here.
+MAIL_SERVER=smtp.gmail.com
+
+MAIL_PORT=587
+
+MAIL_USE_TLS=True
+
+MAIL_USERNAME=
+
+MAIL_PASSWORD=
+
+MAIL_DEFAULT_SENDER=
+```
+
+---
+
+## Run
+
+```bash
+python app.py
+```
+
+Open
+
+```
+http://127.0.0.1:5000
+```
+
+---
+
+# Student Workflow
+
+```text
+Register
+      │
+      ▼
+OTP Verification
+      │
+      ▼
+Login
+      │
+      ▼
+Upload Certificate
+      │
+      ▼
+Pending Review
+      │
+      ▼
+Advisor Approval
+      │
+      ▼
+Grace Marks Added
+```
+
+---
+
+# Advisor Workflow
+
+```text
+Login
+     │
+     ▼
+Review Certificates
+     │
+     ├──── Approve
+     │
+     └──── Reject
+     │
+     ▼
+Assign Grace Marks
+     │
+     ▼
+Generate Reports
+```
+
+---
+
+# Dashboard Features
+
+### Student Dashboard
+
+- Upload certificates
+- Track approval status
+- View accumulated grace marks
+- Delete certificates securely
+
+### Advisor Dashboard
+
+- Review submissions
+- Bulk approve/reject
+- Student analytics
+- Search & filtering
+- Report generation
+- Grace marks management
+
+---
+
+# API Endpoints
+
+| Method | Endpoint | Purpose |
+|---------|----------|----------|
+| POST | `/api/auth/register` | Register user |
+| POST | `/api/auth/login` | Login |
+| POST | `/api/auth/verify` | Verify OTP |
+| GET | `/api/students/profile` | Student profile |
+| GET | `/api/students/my-certificates` | View certificates |
+| POST | `/api/students/certificates` | Upload certificate |
+| DELETE | `/api/students/certificates/{id}` | Delete certificate |
+| GET | `/api/advisors/all-certificates` | View all submissions |
+| POST | `/api/advisors/review-certificate/{id}` | Review certificate |
+| POST | `/api/advisors/approve-all-by-id/{student_id}` | Bulk approve |
+| POST | `/api/advisors/reject-all-by-id/{student_id}` | Bulk reject |
+
+---
+
+# Security Features
+
+- Email OTP Authentication
+- JWT-based Authorization
+- Password Hashing
+- Role-Based Access Control
+- Secure Certificate Upload
+- Protected API Routes
+
+---
+
+# Future Improvements
+
+- Cloud Storage Integration
+- Admin Dashboard
+- Mobile Responsive UI
+- Notification System
+- Digital Certificate Verification
+- QR Code Validation
+- Docker Deployment
+
+---
+
+# License
+
+This project is intended for educational and institutional use.
+
+---
+
+<div align="center">
+
+**Built using Python, Flask, MongoDB, JavaScript, and JWT Authentication.**
+
+</div>
