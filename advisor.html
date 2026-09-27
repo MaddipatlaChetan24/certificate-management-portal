@@ -29,12 +29,6 @@
     let chartInstance = null;
     let allCertificatesCache = [];
     let logoDataURL = null; 
-
-    // This function now reliably fetches the logo and prepares it for the PDF.
-    function preloadLogo() {
-        return new Promise((resolve, reject) => {
-            const LOGO_URL = 'https://i.ibb.co/zVp7hPq/amrita-logo.png';
-            const img = new Image();
             img.crossOrigin = 'anonymous';
             img.onload = function() {
                 const canvas = document.createElement('canvas');
