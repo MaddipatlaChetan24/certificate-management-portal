@@ -19,12 +19,7 @@
     
     .star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; opacity: 0.8; }
     .shooting-star { position: absolute; width: 2px; height: 80px; background: linear-gradient(-45deg, white, rgba(255,255,255,0)); border-radius: 50%; opacity: 0.7; transform: rotate(45deg); animation: shoot 3s linear forwards; }
-    @keyframes shoot { 0% { transform: translate(0,0) rotate(45deg); opacity: 1; } 70% { opacity: 1; } 100% { transform: translate(-800px, 800px) rotate(45deg); opacity: 0; } }
-    
-    .navbar { height: 60px; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; color: #fff; z-index: 100; position: relative; }
-    .navbar h1 { font-size: 1.2rem; }
-    .navbar button { background: #00f7ff; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-    .navbar button:hover { background: #00d4ff; }
+    @keyframes shoot { 0% { transform: translate(0,0) rotate(45deg); opacity: 1; } 70% { opacity: 1; } 100% { transform: transla
     .container { display: flex; height: calc(100vh - 60px); position: relative; z-index: 100; } /* Ensures content is on top */
     .sidebar { width: 220px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); display: flex; flex-direction: column; padding: 1rem; }
     .sidebar h3 { color: #fff; margin-bottom: 1rem; text-align: center; }
