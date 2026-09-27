@@ -28,9 +28,7 @@
     th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); white-space: nowrap; }
     th { background: rgba(255,255,255,0.05); font-weight: 600; }
     .generate-form { display: flex; flex-direction: column; gap: 15px; }
-    .generate-form select, .generate-form input { padding: 8px; border-radius: 4px; background-color: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
-    .generate-form .filter-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-    @media (max-width: 768px) { .stats, .nav-tabs, .search-filter, .generate-form .filter-row { flex-direction: column; } .certificate .details { grid-template-colum
+    .generate-form select, .generate-form input { padding: 8px; border-radius: 4px; background-color: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,2
   <div class="container">
     <div class="stats" role="region" aria-label="Dashboard Statistics"><div class="stat-card blue"><h3>Total Certificates</h3><p id="total-certificates">0</p></div><div class="stat-card orange"><h3>Pending Review</h3><p id="pending-certificates">0</p></div><div class="stat-card green"><h3>Approved</h3><p id="approved-certificates">0</p></div><div class="stat-card orange"><h3>Active Students</h3><p id="active-students">0</p></div></div>
     <div class="nav-tabs" role="navigation" aria-label="Main Navigation"><button class="active" onclick="loadPage('allstudents', this)">All Students</button><button onclick="loadPage('approve', this)">Approve Certificates</button><button onclick="loadPage('reports', this)">Reports</button><button onclick="loadPage('generate', this)">Generate Report</button></div>
