@@ -33,12 +33,6 @@
             img.src = LOGO_URL;
         });
     }
-    const logoPromise = preloadLogo(); // Start loading the logo as soon as the page loads.
-
-    async function generateReport() {
-        try {
-            // This line forces the function to WAIT until the logo is fully loaded before continuing.
-            await logoPromise;
         } catch (e) {
             console.error("Continuing report generation without logo due to loading error:", e);
         }
