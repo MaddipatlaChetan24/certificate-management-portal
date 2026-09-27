@@ -33,10 +33,6 @@
             img.src = LOGO_URL;
         });
     }
-        } catch (e) {
-            console.error("Continuing report generation without logo due to loading error:", e);
-        }
-
         try {
             const reportType = document.getElementById('reportType').value;
             const reportTitle = document.getElementById('reportType').selectedOptions[0].text;
