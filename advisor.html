@@ -28,10 +28,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
   
   <script>
-    const API_URL = 'http://127.0.0.1:5000';
-    const token = localStorage.getItem('accessToken');
-    if (!token || localStorage.getItem('userRole') !== 'advisor') {
-        window.location.href = 'login.html';
     }
 
     let currentPage = 'allstudents';
