@@ -33,12 +33,6 @@
             img.src = LOGO_URL;
         });
             const format = document.getElementById('reportFormat').value;
-            const searchInput = document.getElementById('genSearchInput').value.toLowerCase();
-            const academicYearFilter = document.getElementById('genAcademicYearFilter').value;
-            const batchFilter = document.getElementById('genBatchFilter').value;
-            const schoolFilter = document.getElementById('genSchoolFilter').value;
-            const branchFilter = document.getElementById('genBranchFilter').value;
-            const typeFilter = document.getElementById('genTypeFilter').value;
             const statusFilter = document.getElementById('genStatusFilter').value;
 
             if (!startDate || !endDate || !format) throw new Error('Please fill in all required fields.');
