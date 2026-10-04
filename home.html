@@ -3,14 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard - Student Certificate Portal</title>
-    .certificate { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); flex: 1 1 300px; position:; }}
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { height: 100%; font-family: "Segoe UI", sans-serif; }
+    body { background: #090a0f; overflow: hidden; color: #fff; position: relative; }
+    
+    /* --- *** ANIMATION CONTAINERS *** --- */
+    #particles-js, #stars, #shooting-stars { 
+        position: fixed; 
+        top: 0; left: 0; 
+        width: 100%; height: 100%; 
+        z-index: 1; /* All animations sit behind the content */
+        pointer-events: none; 
+    }
+    
+    .star { position: absolute; width: 2px; height: 2px; background: white; border-radius: 50%; opacity: 0.8; }
+    .shooting-star { position: absolute; width: 2px; height: 80px; background: linear-gradient(-45deg, white, rgba(255,255,255,0)); border-radius: 50%; opacity: 0.7; transform: rotate(45deg); animation: shoot 3s linear forwards; }
+    @keyframes shoot { 0% { transform: translate(0,0) rotate(45deg); opacity: 1; } 70% { opacity: 1; } 100% { transform: transla
+    .container { display: flex; height: calc(100vh - 60px); position: relative; z-index: 100; } /* Ensures content is on top */
+    .sidebar { width: 220px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); display: flex; flex-direction: column; padding: 1rem; }
+    .sidebar h3 { color: #fff; margin-bottom: 1rem; text-align: center; }
+    .blue { background: #2563eb; }
+    .green { background: #16a34a; }
+    .orange { background: #f97316; }
+    .certificates { display: flex; gap: 20px; flex-wrap: wrap; }
+    .certificate { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); flex: 1 1 300px; position:
+    .tag.blue { background: #2563eb; }
+    .tag.green { background: #16a34a; }
+    .tag.orange { background-color: #f97316; }
+    .tag.red { background-color: #ef4444; }
+    .certificate h4 { margin: 5px 0 10px 0; font-size: 16px; flex-grow: 1; }
+    .certificate p { margin: 2px 0; font-size: 14px; color: #f0f0f0; }
+    .certificate .grace { margin-top: 10px; font-weight: bold; color: #16a34a; }
+    .certificate .actions { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; }
+    .action-btn { text-decoration: none; text-align: center; display: block; width: 100%; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; transition: background 0.3s; }
+    .action-btn.view { background: #0284c7; color: white; }
+    .action-btn.view:hover { background: #0369a1; }
+    .action-btn.delete { background: #ef4444; color: white; }
+    .action-btn.delete:hover { background: #dc2626; }
+    .upload-form { max-width: 520px; margin: 0 auto; background: rgba(255,255,255,0.12); border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); animation: fadeSlide 0.6s ease; padding: 30px; }
+    .upload-form h2 { text-align: center; color: #fff; margin-bottom: 20px; }
+    .upload-form label { display: block; margin-top: 20px; font-weight: bold; color: #e0e0e0; font-size: 14px; }
+    .upload-form input, .upload-form select, .upload-form button, .upload-form textarea { width: 100%; padding: 10px; margin-top: 8px; border-radius: 8px; font-size: 16px; background: rgba(255,255,255,0.1); color: #fff; border: none; transition: all 0.3s ease; resize: vertical; }
+    .upload-form input:focus, .upload-form select:focus, .upload-form textarea:focus { outline: none; background: rgba(255,255,255,0.15); box-shadow: 0 0 8px rgba(0,247,255,0.5); }
+    .upload-form input[type="file"] { padding: 10px; background: rgba(255,255,255,0.08); cursor: pointer; }
+    .upload-form input[type="file"]::-webkit-file-upload-button { background: #2563eb; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: background 0.3s ease; }
+    .upload-form input[type="file"]::-webkit-file-upload-button:hover { background: #1e4fc1; }
+    .upload-form button { background-color: #007bff; color: white; border: none; cursor: pointer; transition: 0.3s; margin-top: 20px; background: linear-gradient(90deg, #2563eb, #00f7ff); font-weight: 600; position: relative; overflow: hidden; }
+    .upload-form button:hover { background-color: #0056b3; background: linear-gradient(90deg, #1e4fc1, #00d4ff); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,247,255,0.4); }
     .hidden { display: none; }
     .upload-form input::placeholder, .upload-form textarea::placeholder, .upload-form select:invalid { color: #a0a0a0; }
+    .drop-zone { border: 2px dashed rgba(0, 247, 255, 0.5); border-radius: 8px; padding: 20px; text-align: center; margin-top: 8px; transition: all 0.3s ease; background: rgba(0, 247, 255, 0.05); cursor: pointer; }
+    .drop-zone.dragover { border-color: #00f7ff; background: rgba(0, 247, 255, 0.1); transform: scale(1.02); }
     .drop-zone p { margin: 10px 0; color: #e0e0e0; font-size: 14px; }
+    .drop-zone input[type="file"] { display: none; }
+    .drop-zone .file-info { margin-top: 10px; font-size: 12px; color: #a0a0a0; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
     th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
     th { background: rgba(255,255,255,0.05); font-weight: 600; }
-    .modal { display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0
+    .upload-btn { background: linear-gradient(90deg, #2563eb, #00f7ff); color: #fff; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; display: block; margin: 20px auto 0; }
+    .upload-btn:hover { background: linear-gradient(90deg, #1e4fc1, #00d4ff); transform: translateY(-2px); }
+    .modal { display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
+    .modal-content { background-color: rgba(255,255,255,0.1); backdrop-filter: blur(10px); margin: 5% auto; padding: 2rem; border-radius: 15px; width: 80%; max-width: 600px; max-height: 80vh; overflow-y: auto; color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+    .modal h2 { text-align: center; margin-bottom: 1rem; color: #00f7ff; }
+    .rules-list { list-style: none; margin: 0; padding: 0; }
+    .rules-list li { margin-bottom: 1rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border-left: 4px solid #00f7ff; }
+    .rules-list input[type="checkbox"] { margin-right: 10px; transform: scale(1.2); }
+    .rules-list label { display: flex; align-items: flex-start; cursor: pointer; font-size: 14px; line-height: 1.4; }
+    .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 1.5rem; }
+    .modal-btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+    .modal-btn.primary { background: linear-gradient(90deg, #2563eb, #00f7ff); color: #fff; }
+    .modal-btn.primary:hover { background: linear-gradient(90deg, #1e4fc1, #00d4ff); }
+    .modal-btn.secondary { background: rgba(255,255,255,0.1); color: #fff; }
+    .modal-btn.secondary:hover { background: rgba(255,255,255,0.2); }
+    .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
     .close:hover { color: #fff; }
+    .modal input[type="password"] { width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px; background: rgba(255,255,255,0.1); color: #fff; border: none; font-size: 16px; transition: all 0.3s ease; }
+    .modal input[type="password"]:focus { outline: none; background: rgba(255,255,255,0.15); box-shadow: 0 0 8px rgba(0,247,255,0.5); }
     .modal input[type="password"]::placeholder { color: #a0a0a0; }
   </style>
 </head>
